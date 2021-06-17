@@ -7,6 +7,8 @@ add_executable(CocoLibTests
 		MockTimer.h
 		main.cpp
 		InterpolatorTests.cpp
+		MovingAverageFilterTests.cpp
+		FIRFilterTests.cpp
 		)
 		
 target_link_libraries(CocoLibTests
