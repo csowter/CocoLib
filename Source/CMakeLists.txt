@@ -8,5 +8,7 @@ add_library(CocoLib
 		Interpolator.h
 		MovingAverageFilter.h
 		FIRFilter.h
+		COBS.h
+		COBS.cpp
 		)
 

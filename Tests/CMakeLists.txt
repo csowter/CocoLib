@@ -9,6 +9,7 @@ add_executable(CocoLibTests
 		InterpolatorTests.cpp
 		MovingAverageFilterTests.cpp
 		FIRFilterTests.cpp
+		COBSTests.cpp
 		)
 		
 target_link_libraries(CocoLibTests
