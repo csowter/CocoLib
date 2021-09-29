@@ -2,18 +2,6 @@
 
 #include "CircularBuffer.h"
 
-SCENARIO("Size can be retrieved", "[CircularBuffer]")
-{
-	GIVEN("A buffer with capacity for 5 elements")
-	{
-		CocoLib::CircularBuffer<int, 5> buf;
-
-		THEN("The size is reported as 5")
-		{
-			REQUIRE(5 == buf.Size());
-		}
-	}
-}
 
 SCENARIO("Buffer is empty when created", "[CircularBuffer]")
 {
@@ -32,7 +20,7 @@ SCENARIO("Buffer is full when full", "[CircularBuffer]")
 {
 	GIVEN("A buffer with space for 3 items")
 	{
-		CocoLib::CircularBuffer<int, 3> buf;
+		CocoLib::CircularBuffer<int, 4> buf;
 
 		WHEN("3 items are added")
 		{
@@ -47,82 +35,11 @@ SCENARIO("Buffer is full when full", "[CircularBuffer]")
 		}
 	}
 }
-
-SCENARIO("Count gives number of elements currently in the buffer", "[CircularBuffer]")
-{
-	GIVEN("A buffer with space for 3 elements")
-	{
-		CocoLib::CircularBuffer<int, 3> buf;
-
-		REQUIRE(0 == buf.Count());
-
-		WHEN("Two items are added")
-		{
-			buf.Add(1);
-			buf.Add(2);
-
-			THEN("The count is two")
-			{
-				REQUIRE(2 == buf.Count());
-
-				WHEN("An item is removed")
-				{
-					int data;
-					buf.Remove(data);
-
-					THEN("The count is one")
-					{
-						REQUIRE(1 == buf.Count());
-					}
-				}
-			}
-		}
-	}
-
-}
-
-SCENARIO("Count gives number of elements currently in the buffer after wrap", "[CircularBuffer]")
-{
-	GIVEN("A full buffer with space for 3 elements")
-	{
-		CocoLib::CircularBuffer<int, 3> buf;
-		REQUIRE(0 == buf.Count());
-
-		buf.Add(1);
-		buf.Add(2);
-		buf.Add(3);
-		REQUIRE(3 == buf.Count());
-		REQUIRE(buf.IsFull());
-
-		WHEN("An element is removed")
-		{
-			int data;
-			buf.Remove(data);
-
-			THEN("The count is two")
-			{
-				REQUIRE(2 == buf.Count());
-
-				WHEN("An item is removed")
-				{
-					int data;
-					buf.Remove(data);
-
-					THEN("The count is one")
-					{
-						REQUIRE(1 == buf.Count());
-					}
-				}
-			}
-		}
-	}
-}
-
 SCENARIO("Buffers contents are retrieved in order", "[CircularBuffer]")
 {
 	GIVEN("A buffer with three elements")
 	{
-		CocoLib::CircularBuffer<int, 3> buf;
+		CocoLib::CircularBuffer<int, 4> buf;
 		WHEN("Elements are added, and removed")
 		{
 			int item1 = 1;

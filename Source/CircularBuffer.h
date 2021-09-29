@@ -13,7 +13,6 @@ class CircularBuffer
 	volatile T mBuffer[Length];
 	volatile unsigned int mHead{0};
 	volatile unsigned int mTail{0};
-	volatile bool mFull{ false };
 
 	std::mutex mMutex;
 	
@@ -21,66 +20,38 @@ public:
 	CircularBuffer(CircularBuffer const&) = delete;
 	CircularBuffer& operator=(CircularBuffer const&) = delete;
 	CircularBuffer() {}
-
-	unsigned int Size() const
-	{
-		return Length;
-	}
-
-	unsigned int Count() 
+	bool IsEmpty()
 	{
 		std::lock_guard<std::mutex> lock(mMutex);
-
-		if (mFull)
-			return Length;
-
-		if (mHead >= mTail)
-			return mHead - mTail;
-		else
-			return (Length + mHead) - mTail;
+		return mHead == mTail;
 	}
 
-	bool IsEmpty() 
+	bool IsFull()
 	{
 		std::lock_guard<std::mutex> lock(mMutex);
-
-		return !mFull && (mHead == mTail);
+		return ((mHead + 1) % Length) == mTail;
 	}
-	
-	bool IsFull() 
-	{
-		std::lock_guard<std::mutex> lock(mMutex);
 
-		return mFull;
-	}
-	
 	BufferStatus Add(const T& item)
 	{
 		std::lock_guard<std::mutex> lock(mMutex);
-
-		if(mFull)
+		unsigned int inPos = (mHead + 1) % Length;
+		if (inPos == mTail)
 			return BufferStatus::Full;
-		
+
 		mBuffer[mHead] = item;
-		
-		mHead = (mHead + 1) % Length;
-
-		if (mHead == mTail)
-			mFull = true;
-
+		mHead = inPos;
 		return BufferStatus::OK;
 	}
-	
+
 	BufferStatus Remove(T& item)
 	{
 		std::lock_guard<std::mutex> lock(mMutex);
-
-		if(mHead == mTail && !mFull)
+		if (mHead == mTail)
 			return BufferStatus::Empty;
-		
+
 		item = mBuffer[mTail];
 		mTail = (mTail + 1) % Length;
-		mFull = mHead == mTail;
 		return BufferStatus::OK;
 	}
 };
