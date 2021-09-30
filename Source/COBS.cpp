@@ -28,7 +28,7 @@ std::size_t COBS::Encode(const uint8_t *sourceData, std::size_t sourceLength, ui
 
 				if (strideLength == 0xFF)
 				{
-					destinationData[strideIndex] = strideLength;
+					destinationData[strideIndex] = static_cast<uint8_t>(strideLength);
 					strideIndex = destinationIndex;
 					destinationIndex++;
 					strideLength = 1;
